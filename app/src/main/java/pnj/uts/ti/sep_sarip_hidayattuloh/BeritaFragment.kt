@@ -1,59 +1,49 @@
 package pnj.uts.ti.sep_sarip_hidayattuloh
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ListView
+import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BeritaFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BeritaFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val newsItems = listOf(
+        NewsItem("Berita 1", "Detail berita satu...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 2", "Detail berita dua...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 3", "Detail berita tiga...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 4", "Detail berita empat...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 5", "Detail berita lima...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 6", "Detail berita enam...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 7", "Detail berita tujuh...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 8", "Detail berita delapan...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 9", "Detail berita sembilan...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain"),
+        NewsItem("Berita 10", "Detail berita sepuluh...", "https://th.bing.com/th/id/OIP._2KcAjhfLzoZm34LMGXQdwHaHa?rs=1&pid=ImgDetMain")
+
+        //masih butuh update library di gradle untuk load image from internet
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_berita, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_berita, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BeritaFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BeritaFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        val listView = view.findViewById<ListView>(R.id.lv_berita)
+        val adapter = NewsAdapter(requireContext(), newsItems)
+        listView.adapter = adapter
+
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val intent = Intent(requireContext(), DetailBeritaActivity::class.java)
+            intent.putExtra("title", newsItems[position].title)
+            intent.putExtra("detail", newsItems[position].description)
+            intent.putExtra("imageUrl", newsItems[position].image)
+            startActivity(intent)
+        }
+
+        return view
     }
 }
